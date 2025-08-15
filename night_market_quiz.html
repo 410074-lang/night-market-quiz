@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>夜市冷知識小問答</title>
+<style>
+    body {
+        font-family: 'Microsoft JhengHei', sans-serif;
+        background: radial-gradient(circle at top, #2c2c2c, #000000);
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+        color: #fff;
+    }
+    header {
+        background-color: transparent;
+        padding: 15px;
+        text-align: center;
+        width: 100%;
+        font-size: 1.8em;
+        font-weight: bold;
+        color: #ff4d4d;
+        text-shadow: 0 0 5px #ff4d4d, 0 0 10px #ff4d4d, 0 0 20px yellow;
+        animation: neon-flicker 2s infinite alternate;
+    }
+    @keyframes neon-flicker {
+        0%, 100% { opacity: 1; }
+        45% { opacity: 0.85; }
+        50% { opacity: 0.6; }
+        55% { opacity: 0.85; }
+    }
+    .quiz-container {
+        background: rgba(0,0,0,0.8);
+        border-radius: 15px;
+        box-shadow: 0 0 20px rgba(255, 255, 0, 0.6);
+        padding: 20px;
+        margin-top: 20px;
+        width: 90%;
+        max-width: 500px;
+        text-align: center;
+    }
+    .question {
+        font-size: 1.2em;
+        margin-bottom: 15px;
+        text-shadow: 0 0 5px #fff, 0 0 15px #ff0;
+    }
+    .options button {
+        display: block;
+        width: 100%;
+        margin: 8px 0;
+        padding: 10px;
+        border: none;
+        border-radius: 10px;
+        background: #ffcc00;
+        font-size: 1em;
+        cursor: pointer;
+        transition: 0.3s;
+        color: #000;
+        font-weight: bold;
+        box-shadow: 0 0 10px #ffcc00, 0 0 20px #ff9900;
+    }
+    .options button:hover {
+        background: #ff9900;
+        box-shadow: 0 0 15px #ff6600, 0 0 30px #ff3300;
+        color: #fff;
+    }
+    .options button.correct {
+        background: #00e676;
+        color: white;
+        box-shadow: 0 0 10px #00ff99, 0 0 20px #00ff99;
+    }
+    .options button.wrong {
+        background: #ff1744;
+        color: white;
+        box-shadow: 0 0 10px #ff1744, 0 0 20px #ff1744;
+    }
+    .score {
+        margin-top: 20px;
+        font-size: 1.2em;
+        font-weight: bold;
+        color: #ffea00;
+        text-shadow: 0 0 5px #ffea00, 0 0 15px #ff0;
+    }
+    .next-btn {
+        margin-top: 15px;
+        background: #ff4d4d;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 1em;
+        box-shadow: 0 0 10px #ff4d4d, 0 0 20px #ff1a1a;
+        animation: neon-flicker 2s infinite alternate;
+    }
+    .next-btn:hover {
+        background: #cc0000;
+        box-shadow: 0 0 15px #ff0000, 0 0 30px #ff0000;
+    }
+</style>
+</head>
+<body>
+
+<header>🎪 夜市冷知識小問答 🎯</header>
+
+<div class="quiz-container">
+    <div class="question" id="question">題目載入中...</div>
+    <div class="options" id="options"></div>
+    <div class="score" id="score"></div>
+    <button class="next-btn" id="nextBtn" style="display:none;">下一題 ➡️</button>
+</div>
+
+<script>
+const quizData = [
+    {q: "台灣夜市常見的「大腸包小腸」，外層大腸通常是什麼做的？", options: ["米腸", "麵粉", "豆皮", "麵線"], answer: 0},
+    {q: "在夜市常見的「棺材板」最早起源於哪個城市？", options: ["台中", "台南", "高雄", "基隆"], answer: 0},
+    {q: "章魚燒起源於哪個國家？", options: ["日本", "韓國", "台灣", "中國"], answer: 0},
+    {q: "夜市遊戲「套圈圈」的圈圈通常用什麼材質？", options: ["塑膠", "木頭", "金屬", "竹子"], answer: 0},
+    {q: "「蚵仔煎」的勾芡粉漿傳統上主要是用什麼粉？", options: ["地瓜粉", "麵粉", "玉米粉", "樹薯粉"], answer: 0},
+    {q: "士林夜市著名的小吃「豪大大雞排」大約有多大？", options: ["比臉大", "跟手掌差不多", "比拳頭大", "跟手機差不多"], answer: 0},
+    {q: "夜市常見的「打彈珠」遊戲，傳統上使用的彈珠是什麼顏色最多？", options: ["藍色", "紅色", "綠色", "黃色"], answer: 0},
+    {q: "「鹹水雞」是台灣哪裡發源的小吃？", options: ["高雄", "台北", "台中", "花蓮"], answer: 0},
+    {q: "夜市賣的「糖葫蘆」常用的水果是？", options: ["山楂", "蘋果", "草莓", "葡萄"], answer: 0},
+    {q: "在夜市裡，「飛鏢射氣球」的獎品常見哪一種？", options: ["娃娃", "糖果", "飲料", "香腸"], answer: 0},
+    {q: "「臭豆腐」的氣味主要來自於什麼？", options: ["發酵過程", "豆類本身", "加了蒜", "高溫油炸"], answer: 0},
+    {q: "夜市常見的「麻糬冰淇淋」外皮是什麼做的？", options: ["糯米粉", "麵粉", "玉米粉", "地瓜粉"], answer: 0},
+    {q: "在夜市，「鯛魚燒」外型像什麼魚？", options: ["真鯛", "金魚", "吳郭魚", "鯊魚"], answer: 0},
+    {q: "「碳烤玉米」刷的醬料通常是什麼味道？", options: ["醬油", "番茄醬", "甜辣醬", "沙茶"], answer: 0},
+    {q: "在台灣夜市，「香腸攤」的香腸多半是什麼肉？", options: ["豬肉", "牛肉", "雞肉", "羊肉"], answer: 0}
+];
+
+let currentQuestion = 0;
+let score = 0;
+
+function loadQuestion() {
+    const questionData = quizData[currentQuestion];
+    document.getElementById("question").innerText = questionData.q;
+    const optionsContainer = document.getElementById("options");
+    optionsContainer.innerHTML = "";
+    questionData.options.forEach((opt, index) => {
+        const btn = document.createElement("button");
+        btn.innerText = opt;
+        btn.onclick = () => selectAnswer(index);
+        optionsContainer.appendChild(btn);
+    });
+    document.getElementById("nextBtn").style.display = "none";
+    document.getElementById("score").innerText = `目前分數：${score} / ${quizData.length}`;
+}
+
+function selectAnswer(index) {
+    const questionData = quizData[currentQuestion];
+    const optionButtons = document.querySelectorAll(".options button");
+    optionButtons.forEach((btn, i) => {
+        btn.disabled = true;
+        if (i === questionData.answer) {
+            btn.classList.add("correct");
+        } else if (i === index) {
+            btn.classList.add("wrong");
+        }
+    });
+    if (index === questionData.answer) {
+        score++;
+    }
+    document.getElementById("nextBtn").style.display = "block";
+}
+
+document.getElementById("nextBtn").onclick = () => {
+    currentQuestion++;
+    if (currentQuestion < quizData.length) {
+        loadQuestion();
+    } else {
+        document.querySelector(".quiz-container").innerHTML = `
+            <h2 style="text-shadow:0 0 10px #ff0,0 0 20px #ff0;">🎉 完成！</h2>
+            <p>你的總分：${score} / ${quizData.length}</p>
+            <p>${score >= 12 ? "🌟 夜市達人！" : score >= 8 ? "👍 不錯喔！" : "💪 下次再挑戰吧！"}</p>
+        `;
+    }
+};
+
+loadQuestion();
+</script>
+
+</body>
+</html>
